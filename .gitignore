@@ -1,0 +1,30 @@
+# Virtual environment
+myenv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ignore raw datasets
+data/raw/
+data/processed/
+
+# Models
+models/**/*.pth
+models/**/*.pt
+models/checkpoints/
+# tensor data
+runs/
