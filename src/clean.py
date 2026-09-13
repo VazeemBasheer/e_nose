@@ -2,7 +2,8 @@
 clean.py
 =============
 End-to-end preprocessing for the e-nose COPD / Smokers / Control / Air breath
-dataset (Durán Acevedo et al., 2021, Data in Brief;).
+dataset (Durán Acevedo et al., 2021, Data in Brief; Mendeley Data DOI
+10.17632/h5pcn99zw4).
 
 Pipeline:
   1. Load raw tab-separated sensor files + demographics table.
@@ -17,11 +18,11 @@ Pipeline:
 
 Run:
     python clean.py
-Inputs expected in INPUT_DIR (default /mnt/user-data/uploads/):
+Inputs expected in data/raw/ (relative to project root):
     AIR.txt, CONTROL.txt, COPD.txt, SMOKERS.txt,
     General_data_from_the_dataset.txt
-Output written to OUTPUT_DIR (default /mnt/user-data/outputs/):
-    feature.parquet
+Output (folder convention: all parquet -> data/interim/):
+    data/interim/feature.parquet
 """
 
 import logging
@@ -33,9 +34,10 @@ import pandas as pd
 # --------------------------------------------------------------------------
 # Config
 # --------------------------------------------------------------------------
-INPUT_DIR = Path("C:\Users\vazeem\e_nose\data\raw")
-OUTPUT_DIR = Path("C:\Users\vazeem\e_nose\data\interim")
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent.parent  # src/preprocess.py -> project root
+INPUT_DIR = BASE_DIR / "data" / "raw"
+INTERIM_DIR = BASE_DIR / "data" / "interim"
+INTERIM_DIR.mkdir(parents=True, exist_ok=True)
 
 SENSOR_NAMES = ["SP3", "MQ3", "TGS822", "MQ138", "MQ137", "TGS813", "TGS800", "MQ135"]
 N_SENSORS = 8
@@ -278,7 +280,7 @@ def main():
     other_cols = [c for c in features.columns if c not in id_cols]
     features = features[id_cols + other_cols]
 
-    out_path = OUTPUT_DIR / "feature.parquet"
+    out_path = INTERIM_DIR / "feature.parquet"
     features.to_parquet(out_path, index=False)
 
     log.info(f"\nSaved {out_path}  shape={features.shape}")
